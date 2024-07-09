@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Dispenser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="McLMLagxi.png" alt="Doctor Logo">
+            <h1>Autometic Medicine Dispenser</h1>
+        </header>
+        <div id="page1">
+            <h2>Step 1: Enter Binary Code</h2>
+            <form id="binaryCodeForm">
+                <label for="binaryCode">Medicine Binary Code:</label>
+                <input type="text" id="binaryCode" name="binaryCode" required>
+                <button type="submit">Next</button>
+            </form>
+        </div>
+        <div id="page2" style="display: none;">
+            <h2>Step 2: Enter Quantity</h2>
+            <form id="quantityForm">
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" required>
+                <button type="submit">Generate QR Code</button>
+            </form>
+        </div>
+        <div id="page3" style="display: none;">
+            <h2>Step 3: QR Code</h2>
+            <div id="qrCodeContainer">
+                <img id="qrCode" src="#" alt="QR Code">
+                <p id="paymentStatus"></p>
+            </div>
+        </div>
+        <div id="page4" style="display: none;">
+            <h2>Step 4: Payment Successful</h2>
+            <p>Thank you for your payment. Your medicine is being dispensed.</p>
+        </div>
+    </div>
+    <script src="scptr.js"></script>
+</body>
+</html>
