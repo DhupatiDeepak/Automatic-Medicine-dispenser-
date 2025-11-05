@@ -1,45 +1,198 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medicine Dispenser</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CityCare — Automatic Medicine Dispenser</title>
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2966/2966487.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="McLMLagxi.png" alt="Doctor Logo">
-            <h1>Autometic Medicine Dispenser</h1>
-        </header>
-        <div id="page1">
-            <h2>Step 1: Enter Binary Code</h2>
-            <form id="binaryCodeForm">
-                <label for="binaryCode">Medicine Binary Code:</label>
-                <input type="text" id="binaryCode" name="binaryCode" required>
-                <button type="submit">Next</button>
-            </form>
+  <div id="app" class="app">
+    <header class="topbar">
+      <div class="brand" role="banner">
+        <img alt="CityCare logo" src="https://cdn-icons-png.flaticon.com/512/2966/2966487.png" />
+        <div class="brand-text">
+          <div class="brand-title">CityCare Hospitals</div>
+          <div class="brand-sub">Automatic Medicine Dispenser</div>
         </div>
-        <div id="page2" style="display: none;">
-            <h2>Step 2: Enter Quantity</h2>
-            <form id="quantityForm">
-                <label for="quantity">Quantity:</label>
-                <input type="number" id="quantity" name="quantity" required>
-                <button type="submit">Generate QR Code</button>
-            </form>
-        </div>
-        <div id="page3" style="display: none;">
-            <h2>Step 3: QR Code</h2>
-            <div id="qrCodeContainer">
-                <img id="qrCode" src="#" alt="QR Code">
-                <p id="paymentStatus"></p>
+      </div>
+      <nav class="topnav" role="navigation" aria-label="Main">
+        <button class="nav-btn" data-route="home">Home</button>
+        <button class="nav-btn" data-route="catalog">Catalog</button>
+        <button class="nav-btn" data-route="orders">Orders</button>
+        <button class="nav-btn" data-route="settings">Settings</button>
+      </nav>
+      <div class="top-actions">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme">🌗</button>
+        <button id="helpBtn" class="icon-btn" title="Help">❓</button>
+      </div>
+    </header>
+    <main class="main">
+      <!-- HOME -->
+      <section id="page-home" class="page" data-page="home" hidden>
+        <div class="container">
+          <div class="hero card">
+            <div class="hero-left">
+              <h1>Self-service Medicine Kiosk</h1>
+              <p class="muted">
+                Fast • Contactless • Secure — UPI-ready with instant e-bill.<br>
+                Use the catalog to select medicines or enter binary code directly.
+              </p>
+              <div class="hero-kpis">
+                <div class="kpi">
+                  <div class="kpi-value" id="kpi-stock">—</div>
+                  <div class="kpi-label">Items in inventory</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-value" id="kpi-served">0</div>
+                  <div class="kpi-label">Patients served</div>
+                </div>
+                <div class="kpi">
+                  <div class="kpi-value">₹0</div>
+                  <div class="kpi-label">Transaction fees</div>
+                </div>
+              </div>
+              <div class="hero-actions">
+                <button class="btn primary" data-route="catalog">Browse Catalog</button>
+                <button class="btn ghost" data-route="orders">View Orders</button>
+              </div>
             </div>
+            <div class="hero-right">
+              <div class="featured card mini">
+                <img src="https://images.unsplash.com/photo-1581539250439-c96689b516dd?q=80&w=1200&auto=format&fit=crop" alt="featured">
+                <div class="overlay">
+                  <div class="tag">Contactless Pickup</div>
+                </div>
+              </div>
+              <div class="features">
+                <div class="feature">
+                  <div class="f-icon">🔒</div>
+                  <div>
+                    <div class="f-title">Secure</div>
+                    <div class="f-sub muted">HIPAA friendly</div>
+                  </div>
+                </div>
+                <div class="feature">
+                  <div class="f-icon">⚡</div>
+                  <div>
+                    <div class="f-title">Fast</div>
+                    <div class="f-sub muted">Instant e-bill</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h3 class="section-title">Featured medicines</h3>
+          <div id="featuredGrid" class="featured-grid"></div>
         </div>
-        <div id="page4" style="display: none;">
-            <h2>Step 4: Payment Successful</h2>
-            <p>Thank you for your payment. Your medicine is being dispensed.</p>
+      </section>
+      <!-- CATALOG -->
+      <section id="page-catalog" class="page" data-page="catalog" hidden>
+        <div class="container grid-layout">
+          <aside class="left card">
+            <h4>Selection</h4>
+            <div class="field">
+              <label for="binaryCode">Medicine Binary Code</label>
+              <input id="binaryCode" class="input" placeholder="e.g. 10101001">
+            </div>
+            <div class="field">
+              <label for="medName">Selected Medicine</label>
+              <input id="medName" class="input" placeholder="Auto-fill on click" readonly>
+            </div>
+            <div class="field inline">
+              <label for="quantity">Quantity</label>
+              <input id="quantity" class="input small" type="number" min="1" value="1">
+              <button id="addToCart" class="btn primary">Add to Cart</button>
+            </div>
+            <div class="muted small">Tip: Click a product tile to preview details.</div>
+          </aside>
+          <section class="center card">
+            <div class="catalog-controls">
+              <input id="searchInput" class="input" placeholder="Search medicines or code...">
+              <select id="filterType" class="input small">
+                <option value="all">All types</option>
+                <option value="tablet">Tablet</option>
+                <option value="syrup">Syrup</option>
+                <option value="vitamin">Vitamin</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div id="catalog" class="catalog"></div>
+          </section>
+          <aside class="right card">
+            <h4>Cart</h4>
+            <div id="cartList" class="cart-list">
+              <div class="muted">Cart is empty</div>
+            </div>
+            <div class="summary">
+              <div class="row"><span>Subtotal</span><span id="cSub">₹0.00</span></div>
+              <div class="row"><span>GST (18%)</span><span id="cTax">₹0.00</span></div>
+              <div class="row total"><span>Total</span><span id="cTotal">₹0.00</span></div>
+              <div class="actions">
+                <button id="genQR" class="btn primary" disabled>Generate QR & Pay</button>
+                <button id="clearCart" class="btn ghost" disabled>Clear</button>
+              </div>
+            </div>
+          </aside>
         </div>
+      </section>
+      <!-- ORDERS -->
+      <section id="page-orders" class="page" data-page="orders" hidden>
+        <div class="container">
+          <div class="card">
+            <h3>Orders</h3>
+            <div id="ordersList" class="orders-list muted">No orders yet.</div>
+          </div>
+        </div>
+      </section>
+      <!-- SETTINGS -->
+      <section id="page-settings" class="page" data-page="settings" hidden>
+        <div class="container">
+          <div class="card">
+            <h3>Settings</h3>
+            <div class="field">
+              <label>Theme</label>
+              <div class="row">
+                <button id="themeLight" class="btn outline">Light</button>
+                <button id="themeDark" class="btn outline">Dark</button>
+                <button id="themeAuto" class="btn outline">Auto</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Demo inventory</label>
+              <div class="muted">You can restore the original demo inventory.</div>
+              <div style="margin-top:8px;">
+                <button id="resetInventory" class="btn outline">Reset Inventory</button>
+              </div>
+            </div>
+            <div class="field">
+              <label>Served counter</label>
+              <div class="inline">
+                <input id="servedStart" class="input small" type="number" min="0" value="0">
+                <button id="applyServed" class="btn ghost">Apply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+      <div>© <span id="year"></span> CityCare Hospitals — Demo</div>
+      <div class="footer-actions">
+        <button id="printReceipt" class="btn ghost">Print</button>
+      </div>
+    </footer>
+    <!-- Modal -->
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-panel card">
+        <button id="closeModal" class="modal-close" aria-label="Close">✕</button>
+        <div id="modalContent"></div>
+      </div>
     </div>
-    <script src="scptr.js"></script>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="scptr.js"></script>
 </body>
 </html>
